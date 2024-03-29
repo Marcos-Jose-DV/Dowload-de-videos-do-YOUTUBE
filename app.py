@@ -68,7 +68,6 @@ def open_file_diagolog():
 
     return folder
 
-
 def zipar_arquivos_mp3(diretorio, nome_arquivo_zip):
     with zipfile.ZipFile(nome_arquivo_zip, 'w') as arquivo_zip:
         for root, dirs, files in os.walk(diretorio):
@@ -87,11 +86,9 @@ def merge_text_files(file1, file2, merged_file):
         content1 = f1.readlines()
         content2 = f2.readlines()
 
-        # Remove linhas em branco
         content1 = [line.strip() for line in content1 if line.strip()]
         content2 = [line.strip() for line in content2 if line.strip()]
 
-        # Escreve o conteúdo mesclado no arquivo
         merged.write('\n'.join(content1))
         merged.write('\n')
         merged.write('\n'.join(content2))
