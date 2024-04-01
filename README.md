@@ -1,2 +1,2 @@
 "# App-de-DNA" 
-### Projeto simples para fazer download de video do YOUTUBE
+### Projeto simples para baixar vídeos do YouTube usando URLs listadas em um arquivo de texto e converter os vídeos em arquivos MP3, especialmente para músicas.
