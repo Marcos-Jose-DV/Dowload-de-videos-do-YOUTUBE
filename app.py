@@ -6,6 +6,8 @@ from moviepy.editor import *
 import zipfile
 import time
 
+from propreties import UserPath
+
 
 def dowload_video(url, save_path):
     try:
@@ -36,18 +38,18 @@ def remove_files_by_extension(path=r"C:\Users\marco\Downloads", extension=".mp4"
             os.remove(file_path)
 
 
-def convert_mp4_in_mp3(path=r"C:\Users\marco\Downloads", save_path=r"C:\Users\marco\Downloads\Musics"):
-    files = os.listdir(path)
+def convert_mp4_in_mp3(user_path):
+    files = os.listdir(user_path.Path)
 
-    os.makedirs(save_path, exist_ok=True)
+    os.makedirs(user_path.SavePath, exist_ok=True)
 
     try:
 
         for file in files:
             if file.endswith(".mp4"):
-                mp4_file = os.path.join(path, file)
+                mp4_file = os.path.join(user_path.Path, file)
                 mp3_file = os.path.splitext(file)[0] + ".mp3"
-                mp3_path = os.path.join(save_path, mp3_file)
+                mp3_path = os.path.join(user_path.SavePath, mp3_file)
 
                 if os.path.exists(mp3_path):
                     print(f"O arquivo {
@@ -68,21 +70,21 @@ def open_file_diagolog():
 
     return folder
 
-def zipar_arquivos_mp3(diretorio, nome_arquivo_zip):
-    with zipfile.ZipFile(nome_arquivo_zip, 'w') as arquivo_zip:
-        for root, dirs, files in os.walk(diretorio):
+def zipar_arquivos_mp3(user_path):
+    with zipfile.ZipFile(user_path.Zip, 'w') as arquivo_zip:
+        for root, dirs, files in os.walk(user_path.Path):
             for file in files:
                 if file.endswith('.mp3'):
                     file_path = os.path.join(root, file)
                     print(file_path)
                     arquivo_zip.write(
-                        file_path, os.path.relpath(file_path, diretorio))
+                        file_path, os.path.relpath(file_path, user_path.Path))
 
     print("Zip concluido com sucesso!")
 
 
-def merge_text_files(file1, file2, merged_file):
-    with open(file1, 'r', encoding='utf-8') as f1, open(file2, 'r', encoding='utf-8') as f2, open(merged_file, 'w', encoding='utf-8') as merged:
+def merge_text_files(user_path):
+    with open(user_path.FileOne, 'r', encoding='utf-8') as f1, open(user_path.FileOne, 'r', encoding='utf-8') as f2, open(user_path.MergedFile, 'w', encoding='utf-8') as merged:
         content1 = f1.readlines()
         content2 = f2.readlines()
 
@@ -94,14 +96,14 @@ def merge_text_files(file1, file2, merged_file):
         merged.write('\n'.join(content2))
 
 
-def open_file(path_txt):
+def open_file(user_path):
         try:
-            with open(path_txt, 'r') as file:
+            with open(user_path.MergedFile, 'r') as file:
                 linhas = file.readlines()
-            with open(path_txt, 'w') as file:
+            with open(user_path.MergedFile, 'w') as file:
                 for linha in linhas:
                     file_name = linha.strip()
-                    erros = dowload_video(file_name, r"C:\Users\marco\Downloads")
+                    erros = dowload_video(file_name, user_path.path)
                     if erros:
                         linha = ''
                     else:
@@ -109,14 +111,15 @@ def open_file(path_txt):
 
                     file.write(linha)
 
-                convert_mp4_in_mp3()
+            convert_mp4_in_mp3(user_path)
         except FileNotFoundError:
-            print("Arquivo não encontrado:", path_txt)
+            print("Arquivo não encontrado:", user_path.MergedFile)
 
 if __name__ == "__main__":
     root = tk.Tk()
     root.withdraw()
-
+    user_path = UserPath()
+    
     # video_url = input("Por favor adicione a url do Youtube: ")
     # save_dir = open_file_diagolog()
 
@@ -126,20 +129,10 @@ if __name__ == "__main__":
     # else:
     #     print("Local invalido para salvar.")
     
-    
-    # file1 = r"C:\Users\marco\Downloads\links.txt"
-    # file2 = r"C:\Users\marco\Downloads\links2.txt"
-    # merged_file = r"C:\Users\marco\Downloads\links_mesclado.txt"
-    # merge_text_files(file1, file2, merged_file)
+    merge_text_files(user_path)
 
-    # path_txt = r"C:\Users\marco\Downloads\links_mesclado.txt"
-    # open_file(path_txt)
-    
-    # diretorio = r'C:\Users\marco\Downloads\Musics'
-    # nome_arquivo_zip = r'C:\Users\marco\Downloads\arquivo.zip'
-    # zipar_arquivos_mp3(diretorio, nome_arquivo_zip)
+    open_file(user_path)
+    zipar_arquivos_mp3(user_path)
 
     # time.sleep(10)
-    remove_files_by_extension()
-
-   
+    # remove_files_by_extension()
